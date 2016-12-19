@@ -1,0 +1,2300 @@
+#SingleInstance Force
+#NoEnv
+SendMode Input
+SetTitleMatchMode 2
+
+;******************************************************************************
+; This is a random selection of utilities. All are activated by holding 
+; "Application Key" (left of right Ctrl) and pressing some other key. 
+; Some of them have a second function activated by holding Shift at the 
+; same time. Hopefully you will find some of the useful. Feel free to 
+; modify, reuse or share any of this.
+;
+; AppsKey plus - Result
+;
+;        Enter - Inserts a linebreak.
+;                For use when pressing enter would submit a form.
+;          Tab - Inserts a tab.
+;                For use when pressing tab would change the focus.
+;   Arrow Keys - Move the mouse with the arrow keys.
+;                For use when you need pixel-precise control.
+;       Insert - Searches for the slected text with Google. Or if the text
+;                is a URL, goes directly there. See BROWSER CONFIG below.
+;    Caps Lock - Opens a context menu with commands to change the case of
+;                the selected text, reverse it or "fix" Unix style newlines.
+;           F1 - Shows the AutoHotkey help file.
+;           F4 - Terminates active application after confirmation.
+;                This is like using the Ctrl+Alt+Delete menu.
+;     SHIFT F4 - As above, but skips confirmation window.
+;  Windows Key - Disables the Windows keys. For use with fullscreen games.
+;                Press both windows keys at once to re-enable them.
+;            A - Makes the active window "Always On Top".
+;                This will be indicated on it's title bar with a †.
+;      SHIFT A - Makes the active window NOT "Always On Top".
+;            C - Eject the CD tray.   |Handy if the computer is on the floor
+;      SHIFT C - Retract the CD tray. |or otherwise awkward to reach.
+;            B   Turns the monitor off, similar to power saving mode.
+;                Moving the mouse or typing will turn it back on.
+;            E - Opens this script for editing.
+;            H - Hides the active window.
+;      SHIFT H - Unhide all windows that were hidden this way.
+;            L - Launch (run) a script selected in explorer.
+;                For use when .ahk is not associated with AutoHotkey.
+;            R - Reloads this script.
+;                If the active window is this script, it will be saved first.
+;            T - Makes the active window 50% transpartent.
+;      SHIFT T - Makes the active window opaque again.
+;            V - Pastes clipboard contents as plain text (if possible).
+;                If you "copy" files, this will paste their paths.
+;            W - Wraps text to a specific width. (Default 70).
+;      SHIFT W - Undoes the above.
+;            X - Shows a custom shutdown menu. Press a letter to select from:
+;                Shutdown, Restart, Log Off, Hibernate or Powersave (suspend).
+;            / - Do a RegEx replace on selected text.
+;            [ - Creates matching BBCode tags. (Applied to selected text)
+;            , - Creates matching HTML tags. (Ditto)
+;            ; - Comments/Uncomments a block of AutoHotkey code.
+; ***Custom scripting goes here ***
+;
+;            1 - Adds 4 spaces "NVM - DUX" a commonly typed sequence at Tools4ever.
+;	 cdate - replaces with the current date in mm/dd/yyyy format.
+;        date1 - outputs the date in mm/dd/yyyy Plus AppsKey & 1
+;	 date2 - WILL output a pipe a the date in my format and "NVM"
+;     UMRANOTE - Outputs a quick PDF Blurb for e-mails.
+;        jnote - Prompts the user for a note, concats with date from cdate and adds "-DUX"
+;            2 - Enters the Date in trunkated hex, and 'nvm'. Must be updated daily.
+;	  novm - mm/dd - NVM  (for the xls worksheet)
+;  contactmail - sends a nice intro.
+;     runcto2a - Sends the CTO2A script (inluding the Subject line) 		          
+
+; BROWSER CONFIG
+; This should be the full path to your preferred web browser.
+; Example: C:\Program Files\Mozilla Firefox\Firefox.exe
+
+BrowserPath = C:\Users\mdux\AppData\Local\Google\Chrome\Application\chrome.exe
+
+;******************************************************************************
+
+GroupAdd All
+
+Menu Case, Add, &UPPERCASE, CCase
+Menu Case, Add, &lowercase, CCase
+Menu Case, Add, &Title Case, CCase
+Menu Case, Add, &Sentence case, CCase
+Menu Case, Add
+Menu Case, Add, &Fix Linebreaks, CCase
+Menu Case, Add, &Reverse, CCase
+
+;******************************************************************************
+
+
+;::~1::
+;Send {Space}{Space}{Space}{Space}NVM - Mike
+;return
+
+::~2::
+FormatTime, TimeString,, yyyy-MM-dd
+Send, %TimeString%{Space}
+return
+
+::~d::
+Gui, Add, MonthCal, vDayPick
+Gui, Add, Button, Default, Submit
+Gui, Show
+return
+
+ButtonSubmit:
+Gui, Submit
+FormatTime, DayPick, %DayPick%, yyyy-MM-dd
+Send, %DayPick%{space}
+Gui, Destroy
+return
+
+
+::~~::
+;    ::jnote::
+InputBox, note, Note to add?
+FormatTime, TimeString,, yyy-MM-dd
+
+;Send, %A_YYYY%-%A_MM%-%A_DD% {Space 3}%note% - Dux
+Send %TimeString%{Space 3}%note% - Dux
+return
+
+;::~1::
+;    ::jnote2::
+InputBox, note2, Note to add to Prospect?
+FormatTime, TimeString,, ShortDate
+Send, %TimeString% {space}%note2%|
+Return
+
+;::..date::
+FormatTime, TimeString,, ShortDate
+Send, %TimeString%  {Space 4}
+Return
+
+;::.cdate::
+FormatTime, TimeString,, ShortDate
+Send, %TimeString%{Space}
+Return
+
+;::date1::
+FormatTime, TimeString,, ShortDate
+Send, %TimeString% {Space 4}NVM -Mike
+Return
+
+;::date2::
+FormatTime, TimeString,, ShortDate
+Send, %TimeString%{Space 4}LeftVM -Mike
+Return
+
+;::date3::
+FormatTime, TimeString,, ShortDate
+Send, %TimeString%{Space 4}Pinged -Mike
+Return
+
+
+::dnvm::
+FormatTime, Time, ,H:mm
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}NVM
+Return
+
+::dlvm::
+FormatTime, Time, ,H:mm
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}LeftVM
+Return
+
+::dping::
+FormatTime, Time, ,H:mm
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}Pinged
+Return
+
+;::~3::
+FormatTime, TimeString,, ShortDate
+Send {,}{space}%TimeString%
+Return
+
+;::novm::
+FormatTime, TimeString,, ShortDate
+Send %TimeString% NVM|
+Return
+
+
+AppsKey::
+;Keep AppsKey working (mostly) normally.
+Send {AppsKey}
+Return
+
+;^enter::
+;PutText("`r`n")
+;Return
+
+^tab::
+PutText("`t")
+Return
+
+;^Left::MouseMove, -1, 0, 0, R
+;^Right::MouseMove, 1, 0, 0, R
+;^Up::MouseMove, 0, -1, 0, R
+;^Down::MouseMove, 0, 1, 0, R
+
+;^Insert::
+;TempText := GetText()
+;TempText := RegExReplace(TempText, "^\s+|\s+$") ;trim whitespace
+;If RegExMatch(TempText, "\w\.[a-zA-Z]+(/|$)") ;contains .com etc
+;{
+;   If SubStr(TempText, 1, 4) != "http"
+;      TempText := "http://" . TempText
+;}
+;Else
+;{
+;   If InStr(TempText, " ")
+;   {
+;      StringReplace TempText, TempText, %A_Space%, +
+;      TempText := "%22" . TempText . "%22"
+;   }
+;   TempText := "http://www.google.com/search?&q=" . TempText
+;}
+;Run %BrowserPath% %TempText%
+;Return
+
+^CapsLock::
+GetText(TempText)
+If NOT ERRORLEVEL
+   Menu Case, Show
+Return
+
+^F1::
+IfWinExist AutoHotkey Help
+   WinActivate AutoHotkey Help
+Else
+{
+   SplitPath A_AhkPath, , TempText
+   Run %TempText%\AutoHotkey.chm
+}
+Return
+
+;^F4::
+;MyWin := WinExist("A")
+;WinGetTitle TempText, ahk_id %MyWin%
+;If NOT TempText ;Prevents terminated the taskbar, or the like.
+;   Return
+;If NOT GetKeyState("shift")
+;{
+;   WinGetTitle TempText, ahk_id %MyWin%
+;   MsgBox 49, Terminate!, Terminate "%TempText%"?`nUnsaved data will be lost.
+;   IfMsgBox Cancel
+;      Return
+;}
+;WinGet MyPID, PID, ahk_id %MyWin%
+;Process, Close, %MyPID%
+;Return
+
+^RWin::
+^LWin::
+Hotkey RWin, DoNothing, On
+Hotkey LWin, DoNothing, On
+Return
+;;;;;;;;;;;
+Lwin & RWin::
+Rwin & LWin::
+Hotkey RWin, DoNothing, Off
+Hotkey LWin, DoNothing, Off
+Return
+DoNothing:
+Return
+
+;^a::
+;If NOT IsWindow(WinExist("A"))
+;   Return
+;WinGetTitle, TempText, A
+;If GetKeyState("shift")
+;{
+;   WinSet AlwaysOnTop, Off, A
+;   If (SubStr(TempText, 1, 2) = "† ")
+;      TempText := SubStr(TempText, 3)
+;}
+;else
+;{
+;   WinSet AlwaysOnTop, On, A
+;   If (SubStr(TempText, 1, 2) != "† ")
+;      TempText := "† " . TempText ;chr(134)
+;}
+;WinSetTitle, A, , %TempText%
+;Return
+
+;^b::
+;SendMessage, 0x112, 0xF170, 1,, Program Manager
+;Sleep 1000
+;SendMessage, 0x112, 0xF170, 1,, Program Manager
+;Return
+
+;^`::
+;Drive Eject,, % GetKeyState("shift")
+;Return
+
+^e::Edit
+
+;^h::
+;If GetKeyState("shift")
+;{
+;   Loop Parse, HiddenWins, |
+;      WinShow ahk_id %A_LoopField%
+;   HiddenWins =
+;}
+;else
+;{
+;   MyWin := WinExist("A")
+;   if IsWindow(MyWin) 
+;   {
+;      HiddenWins .= (HiddenWins ? "|" : "") . MyWin
+;      WinHide ahk_id %MyWin%
+;      GroupActivate All
+;   }
+;}
+;Return
+
+^l::
+TempText := GetText()
+If FileExist(TempText)
+   Run %A_AhkPath% "%TempText%"
+Else
+   MsgBox Before using this command, select the .ahk file you wish to run in windows explorer.
+Return
+
+^r::
+KeyWait ~
+IfWinActive %A_ScriptName%
+   Send ^s ;Save
+Reload
+Return
+
+;^t::
+;If NOT IsWindow(WinExist("A"))
+;   Return
+;If GetKeyState("shift")
+;   Winset, Transparent, OFF, A
+;else
+;   Winset, Transparent, 128, A
+;Return
+
+;^v::
+;TempText := ClipBoard
+;If (TempText != "")
+;   PutText(ClipBoard)
+;Return
+
+;^w::
+;GetText(TempText)
+;If NOT WrapWidth
+;   WrapWidth := "70"
+;If GetKeyState("shift")
+;   StringReplace TempText, TempText, %A_Space%`r`n, %A_Space%, All
+;else
+;{
+;   Temp2 := SafeInput("Enter Width", "Width:", WrapWidth)
+;   If ErrorLevel
+;      Return
+;   WrapWidth := Temp2
+;   Temp2 := "(?=.{" . WrapWidth + 1 . ",})(.{1," . WrapWidth - 1 . "}[^ ]) +"
+;   TempText := RegExReplace(TempText, Temp2, "$1 `r`n")
+;}
+;PutText(TempText)
+;Return
+
+^q::
+SplashImage, , MC01, (S) Shutdown`n(R) Restart`n(L) Log Off`n(H) Hibernate`n(P) Power Saving Mode`n`nPress ESC to cancel., Press A Key:, Shutdown?, Courier New
+Input TempText, L1
+SplashImage, Off
+If (TempText = "S")
+   ShutDown 8
+Else If (TempText = "R")
+   ShutDown 2
+Else If (TempText = "L")
+   ShutDown 0
+Else If (TempText = "H")
+   DllCall("PowrProf\SetSuspendState", "int", 1, "int", 0, "int", 0)
+Else If (TempText = "P")
+   DllCall("PowrProf\SetSuspendState", "int", 0, "int", 0, "int", 0)
+Return
+
+^/::
+; RegEx Replace
+TempText := SafeInput("Enter Pattern", "RegEx Pattern:", REPatern)
+If ErrorLevel
+   Return
+Temp2 := SafeInput("Enter Replacement", "Replacement:", REReplacement)
+If ErrorLevel
+   Return
+REPatern := TempText
+REReplacement := Temp2
+GetText(TempText)
+TempText := RegExReplace(TempText, REPatern, REReplacement)
+PutText(TempText)
+Return
+
+^,::
+TempText := SafeInput("Enter Tag", "Example: a href=""http://www.autohotkey.com/""", HTFormat)
+If ErrorLevel
+   Return
+If SubStr(TempText, 1, 4) = "http"
+   TempText = a href="%TempText%"
+HTFormat := TempText
+GetText(Temp2)
+Temp2 := "<" . TempText . ">" . Temp2
+TempText := RegExReplace(TempText, " .*")
+Temp2 := Temp2 . "</" . TempText . ">"
+PutText(Temp2)
+Return
+
+;^[::
+;TempText := SafeInput("Enter Tag", "Example: color=red", BBFormat)
+;If ErrorLevel
+;   Return
+;If SubStr(TempText, 1, 4) = "http"
+;   TempText = url=%TempText%
+;BBFormat := TempText
+;GetText(Temp2)
+;If SubStr(TempText, 1, 4) = "list" AND NOT InStr(Temp2, "[*]")
+;   Temp2 := RegExReplace(Temp2, "m`a)^(\*\s*)?", "[*]")
+;Temp2 := "[" . TempText . "]" . Temp2
+;TempText := RegExReplace(TempText, "=.*")
+;Temp2 := Temp2 . "[/" . TempText . "]"
+;PutText(Temp2)
+;Return
+
+
+
+^`;::
+;Comment or uncomment AutoHotkey code
+GetText(TempText)
+If (SubStr(TempText, 1, 1) = ";")
+   TempText := RegExReplace(TempText, "`am)^;")
+Else
+   TempText := RegExReplace(TempText, "`am)^", ";")
+PutText(TempText)
+Return
+
+
+
+
+;******************************************************************************
+CCase:
+If (A_ThisMenuItemPos = 1)
+   StringUpper, TempText, TempText
+Else If (A_ThisMenuItemPos = 2)
+   StringLower, TempText, TempText
+Else If (A_ThisMenuItemPos = 3)
+   StringLower, TempText, TempText, T
+Else If (A_ThisMenuItemPos = 4)
+{
+   StringLower, TempText, TempText
+   TempText := RegExReplace(TempText, "((?:^|[.!?]\s+)[a-z])", "$u1")
+} ;Seperator, no 5
+Else If (A_ThisMenuItemPos = 6)
+{
+   TempText := RegExReplace(TempText, "\R", "`r`n")
+}
+Else If (A_ThisMenuItemPos = 7)
+{
+   Temp2 =
+   StringReplace, TempText, TempText, `r`n, % Chr(29), All
+   Loop Parse, TempText
+      Temp2 := A_LoopField . Temp2
+   StringReplace, TempText, Temp2, % Chr(29), `r`n, All
+}
+PutText(TempText)
+Return
+
+;******************************************************************************
+
+; Handy function.
+; Copies the selected text to a variable while preserving the clipboard.
+GetText(ByRef MyText = "")
+{
+   SavedClip := ClipboardAll
+   Clipboard =
+   Send ^c
+   ClipWait 0.5
+   If ERRORLEVEL
+   {
+      Clipboard := SavedClip
+      MyText =
+      Return
+   }
+   MyText := Clipboard
+   Clipboard := SavedClip
+   Return MyText
+}
+
+; Pastes text from a variable while preserving the clipboard.
+PutText(MyText)
+{
+   SavedClip := ClipboardAll 
+   Clipboard =              ; For better compatability
+   Sleep 20                 ; with Clipboard History
+   Clipboard := MyText
+   Send ^v
+   Sleep 100
+   Clipboard := SavedClip
+   Return
+}
+
+;This makes sure sure the same window stays active after showing the InputBox.
+;Otherwise you might get the text pasted into another window unexpectedly.
+SafeInput(Title, Prompt, Default = "")
+{
+   ActiveWin := WinExist("A")
+   InputBox OutPut, %Title%, %Prompt%,,, 120,,,,, %Default%
+   WinActivate ahk_id %ActiveWin%
+   Return OutPut
+}
+
+;This checks if a window is, in fact a window.
+;As opposed to the desktop or a menu, etc.
+IsWindow(hwnd) 
+{
+   WinGet, s, Style, ahk_id %hwnd% 
+   return s & 0xC00000 ? (s & 0x80000000 ? 0 : 1) : 0
+   ;WS_CAPTION AND !WS_POPUP(for tooltips etc) 
+}
+
+
+::..mele::
+Send Mele Kalikimaka me ka Hau'oli Makahiki Hou.{return}
+Send (Merry Christmas and Happy New Year){return}
+RETURN
+
+
+;NoClose.ahk
+; Disable the Close button (X) of selected windows
+; To run, save to BlockInput.ahk and install AutoHotkey from www.autohotkey.com
+;Skrommel @2006
+
+#SingleInstance,Force
+SetTitleMatchMode,2
+
+applicationname=NoClose
+
+ids=
+oldids=
+
+Gosub,INIREAD
+Gosub,TRAYMENU
+Gosub,STARTUP
+OnExit,EXIT
+Hotkey,%add%,ADD
+Hotkey,%swap%,SWAP
+
+Loop
+{
+  Sleep,500
+  allids=
+  activeids=
+  WinGet,id_,List,,,Program Manager
+  Loop,%id_%
+  {
+    Sleep,0
+    id:=id_%A_Index%
+    allids=%allids%%id%`,
+    IfInString,ids,%id%`,
+      activeids=%activeids%%id%`,
+    If autodisable=0
+      Continue
+    IfInString,oldids,%id%`,
+      Continue
+    WinGetTitle,title,ahk_id %id%
+    WinGetClass,class,ahk_id %id%
+    rule=%title% ahk_class %class%|||
+    IfInString,rules,%rule%
+    {
+      DISABLE(id)
+      activeids=%activeids%%id%`,
+    }
+  }
+  oldids:=allids
+  ids:=activeids
+}
+Return
+
+
+STARTUP:
+allids=
+WinGet,id_,List,,,Program Manager
+Loop,%id_%
+{
+  id:=id_%A_Index%
+  allids=%allids%%id%`,
+  If disableonstartup=0
+    Continue
+  WinGetTitle,title,ahk_id %id%
+  WinGetClass,class,ahk_id %id%
+  rule=%title% ahk_class %class%|||
+  IfInString,rules,%rule%
+  {
+    DISABLE(id)
+    ids=%ids%%id%`,
+  }
+}
+oldids:=allids
+Return
+
+
+EXIT:
+If enableonexit=0
+  ExitApp
+WinGet,id_,List,,,Program Manager
+Loop,%id_%
+{
+  id:=id_%A_Index%
+  IfInString,ids,%id%`,
+  {
+    ENABLE(id)
+    StringReplace,ids,ids,%id%`,,
+  }
+}
+ExitApp
+
+
+ADD:
+WinGet,id,ID,A
+WinGetTitle,title,ahk_id %id%
+WinGetClass,class,ahk_id %id%
+rule=%title% ahk_class %class%|||
+IfInString,rules,%rule%
+  Return
+Else
+{
+  DISABLE(id)
+  rules=%rules%%rule%
+  ids=%ids%%id%`,
+  IniWrite,%rules%,%applicationname%.ini,Settings,rules
+}
+Return
+
+
+SWAP:
+WinGet,id,ID,A
+WinGetTitle,title,ahk_id %id%
+WinGetClass,class,ahk_id %id%
+IfInString,ids,%id%`,
+{
+  ENABLE(id)
+  StringReplace,ids,ids,%id%`,,
+  Return
+}
+DISABLE(id)
+ids=%ids%%id%`,
+Return
+
+
+DISABLE(id) ;By RealityRipple at http://www.xtremevbtalk.com/archive/index.php/t-258725.html
+{
+  menu:=DllCall("user32\GetSystemMenu","UInt",id,"UInt",0)
+  DllCall("user32\DeleteMenu","UInt",menu,"UInt",0xF060,"UInt",0x0)
+  WinGetPos,x,y,w,h,ahk_id %id%
+  WinMove,ahk_id %id%,,%x%,%y%,%w%,% h-1
+  WinMove,ahk_id %id%,,%x%,%y%,%w%,% h+1
+}
+
+
+ENABLE(id) ;By Mosaic1 at http://www.xtremevbtalk.com/archive/index.php/t-258725.html
+{
+  menu:=DllCall("user32\GetSystemMenu","UInt",id,"UInt",1)
+  DllCall("user32\DrawMenuBar","UInt",id)
+}
+
+
+TRAYMENU:
+Menu,Tray,NoStandard 
+Menu,Tray,DeleteAll 
+Menu,Tray,Add,%applicationname%,ABOUT
+Menu,Tray,Add,
+Menu,Tray,Add,&Settings...,SETTINGS
+Menu,Tray,Add,&About...,ABOUT
+Menu,Tray,Add,E&xit,EXIT
+Menu,Tray,Default,%applicationname%
+Menu,Tray,Tip,%applicationname%
+Return
+
+
+INIREAD:
+IfNotExist,%applicationname%.ini
+{
+  disableonstartup=1
+  autodisable=1
+  enableonexit=1
+  swap=^1
+  add=^2
+  rules=
+  Gosub,INIWRITE
+  Gosub,ABOUT
+}
+IniRead,disableonstartup,%applicationname%.ini,Settings,disableonstartup
+IniRead,autodisable,%applicationname%.ini,Settings,autodisable
+IniRead,enableonexit,%applicationname%.ini,Settings,enableonexit
+IniRead,swap,%applicationname%.ini,Settings,swap
+IniRead,add,%applicationname%.ini,Settings,add
+IniRead,rules,%applicationname%.ini,Settings,rules
+Return
+
+
+INIWRITE:
+IniWrite,%disableonstartup%,%applicationname%.ini,Settings,disableonstartup
+IniWrite,%autodisable%,%applicationname%.ini,Settings,autodisable
+IniWrite,%enableonexit%,%applicationname%.ini,Settings,enableonexit
+IniWrite,%swap%,%applicationname%.ini,Settings,swap
+IniWrite,%add%,%applicationname%.ini,Settings,add
+IniWrite,%rules%,%applicationname%.ini,Settings,rules
+Return
+
+
+SETTINGS:
+HotKey,%swap%,Off
+HotKey,%add%,Off
+Gui,Destroy
+Gui,Add,Tab,W340 H330 xm,Options|Rules
+Gui,Tab,1
+Gui,Add,GroupBox,xm+10 ym+40 w320 h70,&Hotkey to Enable/Disable the active windows' close button
+Gui,Add,Hotkey,xp+10 yp+20 w300 vsswap
+StringReplace,current,swap,+,Shift +%A_Space%
+StringReplace,current,current,^,Ctrl +%A_Space%
+StringReplace,current,current,!,Alt +%A_Space%
+Gui,Add,Text,xm+20 y+5,Current hotkey: %current%
+
+Gui,Add,GroupBox,xm+10 y+30 w320 h70,Hotkey to &Add a new rule
+Gui,Add,Hotkey,xm+20 yp+20 w300 vsadd
+StringReplace,current,add,+,Shift +%A_Space%
+StringReplace,current,current,^,Ctrl +%A_Space%
+StringReplace,current,current,!,Alt +%A_Space%
+Gui,Add,Text,xm+20 y+5,Current hotkey: %current%
+
+Gui,Add,GroupBox,xm+10 y+30 w320 h80,Automatic rule execution
+Gui,Add,CheckBox,xm+20 yp+20 Checked%disableonstartup% vsdisableonstartup,Disable close buttons on NoClose &Startup
+Gui,Add,CheckBox,xm+20 y+5 Checked%autodisable% vsautodisable,Disable close buttons on &Window Creation
+Gui,Add,CheckBox,xm+20 y+5 Checked%enableonexit% vsenableonexit,Enable close buttons on NoClose &Exit
+
+Gui,Tab,2
+StringReplace,rules,rules,|||,`n,All
+Gui,Add,GroupBox,w320 h280 xm+10 y+10,&Windows Titles and Classes
+Gui,Add,Edit,xm+20 yp+20 w300 h180 Multi -Wrap vsrules,%rules%
+Gui,Add,Text,xm+20 y+5,Syntax: <Part of a Window Title> <ahk_class Class Name>
+Gui,Add,Text,xm+20 y+5,Example: Calculator ahk_class SciCalc   
+Gui,Add,Text,xm+30 y+5,will disable all Calculator close buttons.
+Gui,Add,Text,xm+20 y+5,Either part is optional.
+
+Gui,Tab
+Gui,Add,Button,xm+10 y+30 w75 GSETTINGSOK,&OK
+Gui,Add,Button,x+5 w75 GSETTINGSCANCEL,&Cancel
+Gui,Show,,%applicationname% Settings
+Return
+
+SETTINGSOK:
+Gui,Submit
+If sswap<>
+{
+  swap:=sswap
+  HotKey,%swap%,SWAP
+}
+HotKey,%swap%,On
+If sadd<>
+{
+  add:=sadd
+  HotKey,%add%,ADD
+}
+HotKey,%add%,On
+If sdelay<>
+  delay:=sdelay
+StringReplace,rules,srules,`n,|||,All
+rules=%rules%|||
+Loop
+{
+  StringReplace,rules,rules,||||||,|||,All
+  StringGetPos,pos,rules,||||||
+  If pos<0
+    Break
+}
+StringLeft,start,rules,3
+If start=|||
+  StringTrimLeft,rules,rules,3
+disableonstartup:=sdisableonstartup
+autodisable:=sautodisable
+enableonexit:=senableonexit
+Gosub,INIWRITE
+Return
+
+SETTINGSCANCEL:
+HotKey,%swap%,SWAP
+HotKey,%swap%,On
+HotKey,%add%,ADD
+HotKey,%add%,On
+Gui,Destroy
+Return
+
+
+ABOUT:
+Gui,99:Destroy
+Gui,99:Margin,20,20
+Gui,99:Add,Picture,xm Icon1,%applicationname%.exe
+Gui,99:Font,Bold
+Gui,99:Add,Text,x+10 yp+10,%applicationname% v1.1
+Gui,99:Font
+Gui,99:Add,Text,y+10,Disable the Close button (X) of selected windows.
+Gui,99:Add,Text,y+10,- Press Ctrl+1 to Enable or Disable a close button.
+Gui,99:Add,Text,y+5 ,- Press Ctrl+2 to Add a rule.
+Gui,99:Add,Text,y+10,- To change the settings, choose Settings in the tray menu.
+
+Gui,99:Add,Picture,xm y+20 Icon5,%applicationname%.exe
+Gui,99:Font,Bold
+Gui,99:Add,Text,x+10 yp+10,1 Hour Software by Skrommel
+Gui,99:Font
+Gui,99:Add,Text,y+10,For more tools, information and donations, please visit 
+Gui,99:Font,CBlue Underline
+Gui,99:Add,Text,y+5 G1HOURSOFTWARE,www.1HourSoftware.com
+Gui,99:Font
+
+Gui,99:Add,Picture,xm y+20 Icon7,%applicationname%.exe
+Gui,99:Font,Bold
+Gui,99:Add,Text,x+10 yp+10,DonationCoder
+Gui,99:Font
+Gui,99:Add,Text,y+10,Please support the contributors at
+Gui,99:Font,CBlue Underline
+Gui,99:Add,Text,y+5 GDONATIONCODER,www.DonationCoder.com
+Gui,99:Font
+
+Gui,99:Add,Picture,xm y+20 Icon6,%applicationname%.exe
+Gui,99:Font,Bold
+Gui,99:Add,Text,x+10 yp+10,AutoHotkey
+Gui,99:Font
+Gui,99:Add,Text,y+10,This tool was made using the powerful
+Gui,99:Font,CBlue Underline
+Gui,99:Add,Text,y+5 GAUTOHOTKEY,www.AutoHotkey.com
+Gui,99:Font
+
+Gui,99:Show,,%applicationname% About
+hCurs:=DllCall("LoadCursor","UInt",NULL,"Int",32649,"UInt") ;IDC_HAND
+OnMessage(0x200,"WM_MOUSEMOVE") 
+Return
+
+1HOURSOFTWARE:
+  Run,http://www.1hoursoftware.com,,UseErrorLevel
+Return
+
+DONATIONCODER:
+  Run,http://www.donationcoder.com,,UseErrorLevel
+Return
+
+AUTOHOTKEY:
+  Run,http://www.autohotkey.com,,UseErrorLevel
+Return
+
+99GuiClose:
+  Gui,99:Destroy
+  OnMessage(0x200,"")
+  DllCall("DestroyCursor","Uint",hCur)
+Return
+
+WM_MOUSEMOVE(wParam,lParam)
+{
+  Global hCurs
+  MouseGetPos,,,,ctrl
+  If ctrl in Static10,Static14,Static18
+    DllCall("SetCursor","UInt",hCurs)
+  Return
+}
+Return
+
+
+::..farley::
+InputBox, NAME, First and Last?
+InputBox, COMP, Company?
+InputBox, TITLE, Job Title?
+InputBox, PHONE, Phone?
+InputBox, CELL, Mobile?
+InputBox, EMAIL, E-Mail?
+InputBox, ADDY, Address?
+InputBox, SPOUSE, Spouse?
+InputBox, KIDS, Children?
+InputBox, PETS, Pets?
+InputBox, CAR, Car?
+InputBox, BDAY, Birthday?
+InputBox, TALENT, Skills and Talents?
+InputBox, NOTES, Notes - Other
+Send Name:{tab}%NAME% {return}
+Send Company:{tab}%COMP% {return}
+Send Title:{tab}%TITLE% {return}
+Send Phone:{tab}%PHONE% {return}
+Send Mobile:{tab}%CELL% {return}
+Send e-mail:{tab}%EMAIL% {return}
+Send Address:{tab}%ADDY% {return}
+Send Spouse:{tab}%SPOUSE% {return}
+Send Kids:{tab}%KIDS% {return}
+Send Pets:{tab}%PETS% {return}
+Send Car:{tab}%CAR% {return}
+Send Birthday:{tab}%BDAY% {return}
+Send Talent:{tab}%TALENT% {return}
+Send Notes:{tab}%NOTES% {return}
+;Send ----
+Return
+
+::..bizfarley::
+InputBox, VISIT, Date Visited
+InputBox, COMP, Company?
+InputBox, NAME, First and Last?
+InputBox, TITLE, Job Title?
+InputBox, PHONE, Phone?
+InputBox, EMAIL, E-Mail?
+InputBox, ADDY, Address?
+InputBox, WEB, Web Addy?
+InputBox, DUNS, Duns Number?
+InputBox, ANNREV, Annual Revenue?
+InputBox, EMP, Number of Employees?
+InputBox, VERT, Vertical?
+InputBox, NOTES, Notes - Other
+InputBox, nothing, Highlight the the Destination now.
+Send %COMP%{space}-{space}%NAME% {return}
+Send Company :{tab}%COMP% {return}
+Send Name:{space}%NAME% {tab} Title:{space}%TITLE% {return}
+Send e-mail:{space}%EMAIL% {tab} Phone:{space}%PHONE% {return}
+Send Address:{space}%ADDY% {return}
+Send Vertical:{space}%VERT% {tab} DUNS:{space}%DUNS% {return}
+Send Web ^b :{space}%WEB% {return}
+Send Annual Revenue:{space}%ANNREV% {tab}Employee Count:{tab}%EMP% {return}
+Send Notes:{space}%NOTES% {return}
+Send Visit Date: %VISIT% {return}
+Send ----
+Return
+
+::..hr::
+Send ------------------------------------------------------------{return}
+Return
+
+::..project::
+Send Purpose Statement: {return}
+Send Envisioned Future: {return}
+Send Current Reality: {return}
+Send Specific Commitments: {return}
+Send Timeline{return}
+Send mm/dd/yyyy	| ddd |{return}
+Return
+
+::..newproject::
+InputBox, purpose, What is the purpose of this project?
+InputBox, future, What does the Done State look like? 
+InputBox, reality, What does the current state look like?
+InputBox, commitments, What commitments needs to be made?
+InputBox, timeline, What are the time specific gates?
+Send Purpose Statement: {return}
+Send {tab}* %purpose% {return}
+Send {BS}Envisioned Future: {return}
+Send {tab}* %future%{return}
+Send {BS}Current Reality: {return}
+Send {tab}* %reality%{return}
+Send {BS}Specific Commitments: {return}
+Send {tab}* %commitments%{return}
+Send {BS}Timeline{return}
+Send {tab}* %timeline%{return}
+Send {BS}-------------------------------------------------------------------------------- {return 2}
+Send -------------------------------------------------------------------------------- {return}
+Return
+
+;::..cs::
+Send Sent CS_UMRA_SSRPM_Vid Template
+Return
+
+f2:: ;used to make wikilinks in wikidpad
+Send ^c
+Sleep 100
+clipboard = `%%clipboard%`%
+send ^v
+return
+
+
+::..smarter::
+Send S - Specific, What is this goal, precisely?{return}
+Send M - Measurable, how will you know when you are done?{return}
+Send A - Action Oriented. What actions need to take place?{return}
+Send R - Realistic. Is this even doable? {return}
+Send T - Time Bound. When will this goal be met?{return}
+Send E - Ecological - How will this affect those around me?{return}
+Send R - Reward - What is the driving intrinsic motivation?{return}
+Send __Todo List__{return}{return}
+Send __Notes__{return}
+Return
+
+::..smartgoal::
+InputBox, S, What is this goal?,state it in the positive
+InputBox, M, How will you know when your are done?
+InputBox, A, What Actions need to be taken?
+InputBox, R, Is this goal realistic?
+InputBox, T, When will this goal be met?
+InputBox, E, How will this effect those around me?
+InputBox, R, What is the Reward/Motivation?
+Send S - Specific: %S% {return}
+Send M - Measurable: %M% {return}
+Send A - Actions: %A% {return}
+Send R - Realistic: %R% {return}
+Send T - Time Bound: %T% {return}
+Send E - Ecological: %E% {return}
+Send R - Reward: %R% {return}
+Send __Todo List__ {return 2}
+Send __Notes__{return}
+Return
+
+::..nutrition::
+InputBox, FATS, How many grams of fat?
+InputBox, CARBS, How many grams of carbohydrate?
+InputBox, PRO, How many grams of Protein?
+InputBox, KCAL, Total KCalories?
+InputBox, FIBER, How many grams of Fiber?
+InputBox, WEIGHT, Morning weight?
+Send Morning Weight: %WEIGHT% {return}
+Send Nutrition for previous day: {return}
+Send %KCAL% total Calories {return}
+Send %PRO% grams of Protein {return}
+Send %FATS% grams of fats {return}
+Send %CARBS% grams of carbohydrates{return}
+Send %FIBER% grams of fiber
+Return
+
+::..quicknut::
+InputBox, ITEM, What did you eat?
+InputBox, KCAL, Total KCalories?
+InputBox, FATS, How many grams of fat?
+InputBox, CARBS, How many grams of carbohydrate?
+InputBox, FIBER, How many grams of Fiber?
+InputBox, PRO, How many grams of Protein?
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}
+Send Food:{space}%ITEM%,{space}%KCAL% total Calories,{space}%PRO% grams of Protein,{space}%FATS% grams of fats,{space}%CARBS% grams of carbohydrates,{space}%FIBER% grams of fiber{return}
+Return
+
+::..please::
+Send Please let me know if you have any questions.{return}{return}
+Send Best regards,{return}
+Return
+
+
+::ddd::
+FormatTime, Time, ,H:mm
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}
+Return
+
+::dd8601::
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}
+Return
+
+
+::retards::regards
+::preffered::preferred
+::prefferred::preferred
+
+::..br::Best regards,
+
+::~date::
+FormatTime, Time, ,H:mm
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}
+Return
+
+
+;;;;;;;;;;;;;;;;;;;;;EPP;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;::EPPBlast::
+Subject:
+InputBox,Deal, Deal type Flip of Fix
+InputBox,Gross, Gross Profit?
+InputBox,Addy, Address
+InputBox,SQFT, Square Feet
+InputBox,Built, Built
+InputBox,Desc, Description
+InputBox,Cross, Cross Streets
+InputBox,ARV, After Repair Value
+InputBox,Rehab, Estimated Rehab
+InputBox,Whole, Wholesale Price
+InputBox,Apra, Appraisal Method Walkthru or Opinion of Value
+InputBox,Link, Web Link
+
+Send New %Deal% Deal w/ $%Gross% Gross Profit!{tab}{return 2}
+Send Hi *|FNAME|*,{return 2}
+Send We have a New %Deal% with $%Gross% for you...{return 2}
+Send $%Gross% GROSS PROFIT {return 2}
+Send Here are the Details:{return}
+Send ^bAddress:^b{tab} %Addy%{return} 
+Send ^bDesc:^b{tab} %Desc%{return}
+Send ^bSQFT:^b{tab} %SQFT%{return}
+Send ^bBuilt:^b{tab} %Built%{return}
+Send ^bCross Streets:^b{tab} %Cross%{return 2}
+Send ^bARV:^b{tab} $%ARV%  (per %Apra%){return}
+Send ^bEST Rehab:^b $%rehab%{return 2}
+Send ^bWholesale Price:^b $%Whole%{return 2}
+Send %Link%{return 2}
+Send Please call/respond for access. {return 2}
+Send Thank you, {return2}
+Send Michael Dux  253.693.8067  michael@EvergreenPropertyPros.com{return}
+Return
+
+;::..EPPE::Michael@EvergreenPropertyPros.com
+::..EPPa::
+Send Evergreen Property Pros{return}
+Send 4227 S. Meridian, Ste C-279{return}
+Send Puyallup, WA 98373{return}
+Return
+
+;::..EPPp:: 253.693.8067
+;::..EPPlist::http://bit.ly/EPPInsider
+;::..EPPW::www.EvergreenPropertyPros.com
+;::..eppsell::www.bit.ly/sellyourhousetome
+;::..eppndnc::www.bit.ly/EPPNDNC
+
+;::~e::
+FormatTime, TimeString,, yyyy-MM-dd
+Send (){space}%TimeString%{Space 2}{+}EPP{left 5} 
+return
+
+;::~t::
+FormatTime, TimeString,, yyyy-MM-dd
+Send (){space}%TimeString%{Space 2}{+}T4e @work{left 11} 
+return
+
+;::..eppcl::
+Send Hi, {return 2}
+Send I'm interested in the property you listed on craigslist.{return 2}
+Send First things first, please verify that this is ^bnot your current residence^b and that you are ^bnot in preforeclosure or foreclosure.^b{return 2}
+Send Please provide the address so that I can run some numbers and make you a CASH offer.{return 2}
+Send Respectfully,{return}
+Send Michael{return}
+Send Evergreen Property Pros {return}
+Send Michael@EvergreenPropertyPros.com {return} 
+Send 253.693.8067{return}
+return
+
+
+;::..eppsig::
+Send Best Regards, {return 2}
+Send Michael A Dux {return}
+Send Investor {return}
+Send P: 253-777-8731{return}
+Send www.EvergreenPropertyPros.com {return}
+Return
+
+
+;HUMOROUS +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
+
+
+::..lightbulb::
+Send How many software engineers does it take to change a light bulb? {return}
+Sleep, 5000
+Send It can't be done; it's a hardware problem. {return}
+
+
+::..haveyou::Have you tried turning it off and on again? 
+
+::..beaver::
+Send In a world where mankind is ruled by a giant intelligent beaver, what food is no longer consumed?{return}
+Sleep, 8000
+Send The Danish.  In a world ruled by a giant beaver, mankind builds many dams to please the beaver overlord. The low-lying city of Copenhagen is flooded. Thousands die. Devastated, the Danes never invent their namesake pastry.{return}
+Return
+
+
+::..robot1::
+Send I want to go on record. I welcome our robot overlords.{space}{space} 
+Return
+
+::..robot2::
+Send 01001001 00100000 01110111 01100001 01101110 01110100 00100000 01110100 01101111 00100000 01100111 01101111 00100000 01101111 01101110 00100000 01110010 01100101 01100011 01101111 01110010 01100100 00101110 00100000 01001001 00100000 01110111 01100101 01101100 01100011 01101111 01101101 01100101 00100000 01101111 01110101 01110010 00100000 01110010 01101111 01100010 01101111 01110100 00100000 01101111 01110110 01100101 01110010 01101100 01101111 01110010 01100100 01110011 00101110 {space}
+Return
+
+
+; Carlin.. the mysterious IT
+::..it::
+Send If you have it, you don't need it; {return}
+Sleep, 500
+Send if you need it, you don't have it; {return}
+Sleep, 500
+Send if you have it, you need more of it;  {return}
+Sleep, 500
+Send if you have more of it, you don't need less of it.  {return}
+Sleep, 500
+Send You need it to get it, and you certainly need it to get more of it,  {return}
+Sleep, 500
+Send but if you don't already have any of it to begin with,  {return}
+Sleep, 500
+Send you can't get any of it to get started-- {return}
+Sleep, 500
+Send which means, you really have no idea how to get it in the first place, do you?  {return}
+Sleep, 500
+Send You can share it, sure, you can even stockpile it if you'd like, {return}
+Sleep, 500
+Send  but you can't fake it, wanting it, needing it, wishing for it.  {return}
+Sleep, 500
+Send The point is, if you've never had any of it, people just seem to know.{return}
+Return
+
+
+::..Tort::
+InputBox, Name, Who?
+Send You're in a desert walking along in the sand when all of the sudden you look down and you see a tortoise, %Name%, it's crawling towards you.{return}
+Send You reach down, and flip the tortoise over on its back %Name%. The tortoise lays on its back, its belly baking in the hot sun, beating its legs trying to turn itself over, but it can't, not without your help, but you're not helping. Why is that %Name%?{return}
+Return
+
+::..friday::
+Send You will need to know the difference between Friday and a fried egg. It's quite a simple difference, but an important one. Friday comes at the end of the week, whereas a fried egg comes out of a chicken. Like most things, of course, it isn't quite that simple. The fried egg isn't properly a fried egg until it's been put in a frying pan and fried. This is something you wouldn't do to a Friday, of course, though you might do it on a Friday. You can also fry eggs on a Thursday, if you like, or on a cooker. It's all rather complicated, but it makes a kind of sense if you think about it for awhile.
+Return
+
+
+::..nar::
+Send Narwhals, Narwhals {return}
+Send Swimming in the ocean causing a commotion {return}
+Send 'Cuz they are so awesome narwhals, narwhals {return}
+Send Swimming in the ocean {return}
+Send Pretty big and pretty white {return}
+Send They beat a polar bear in a fight {return}
+Send Like an underwater unicorn {return} {return}
+Send They've got a kick ass facial horn {return}
+Send They're Jedi of the sea they stop Cthulhu eating ye {return}
+send Narwhals they are narwhals {return}
+Send Narwhals just don't let them touch your balls {return} {return}
+Send Narwhals they are narwhals  {return}
+Send Narwhals  {return} {return}
+Send Inventors of the shish kebab  {return}
+Send "http://bit.ly/1obfCeW"
+Return
+
+::..lorum1::
+Send Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pretium elementum dolor, ut vestibulum purus vestibulum vitae. Proin porta malesuada sem, non sollicitudin felis vulputate eu. Phasellus id ornare neque, in luctus nunc. Proin eget arcu sodales, fringilla quam at, ullamcorper justo. Sed enim odio, egestas in turpis in, ornare tempus nisi. Pellentesque porttitor orci elit, quis vestibulum enim cursus non. Vestibulum fermentum metus vel pulvinar consectetur. 
+Return
+::..lorum2::
+Send Lorum ipsumUt congue et augue eu congue. Donec sollicitudin mollis libero vitae dictum. Duis leo magna, gravida vel sem vel, placerat ullamcorper diam. Proin purus sapien, vulputate ac sodales ac, pellentesque vitae ipsum. Curabitur non lorem quis nunc aliquam molestie. Praesent sed scelerisque ante. Cras eget euismod enim, nec bibendum diam. Maecenas vel erat lacinia, ornare magna ut, pretium quam. Ut ornare enim non pulvinar pharetra. Vivamus sit amet lacus placerat, faucibus ante id, iaculis diam. Fusce porttitor, magna nec gravida congue, nunc nisl euismod est, quis scelerisque sapien felis quis augue. Morbi et facilisis justo, id blandit purus. Proin non varius magna. Nulla tempus efficitur elit, non porta orci aliquam eget. Pellentesque consectetur lobortis mauris sed lobortis. 
+Return
+::..lorum3::
+Send Lorum ipsumUt congue et augue eu congue. Donec sollicitudin mollis libero vitae dictum. Duis leo magna, gravida vel sem vel, placerat ullamcorper diam. Proin purus sapien, vulputate ac sodales ac, pellentesque vitae ipsum. Curabitur non lorem quis nunc aliquam molestie. Praesent sed scelerisque ante. Cras eget euismod enim, nec bibendum diam. Maecenas vel erat lacinia, ornare magna ut, pretium quam. Ut ornare enim non pulvinar pharetra. Vivamus sit amet lacus placerat, faucibus ante id, iaculis diam. Fusce porttitor, magna nec gravida congue, nunc nisl euismod est, quis scelerisque sapien felis quis augue. Morbi et facilisis justo, id blandit purus. Proin non varius magna. Nulla tempus efficitur elit, non porta orci aliquam eget. Pellentesque consectetur lobortis mauris sed lobortis. {return}
+Send Sed aliquam rhoncus dictum. Praesent eros orci, congue ut aliquet vel, aliquet et neque. Aenean vitae vestibulum lorem, vitae faucibus lorem. Sed id metus fringilla, pretium mauris vel, rhoncus felis. Nullam consectetur efficitur magna, at malesuada massa sagittis at. Cras maximus viverra finibus. Proin sodales, nisi sit amet fermentum faucibus, arcu mi malesuada turpis, at elementum odio arcu in dui. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris condimentum porttitor mattis.
+Return
+
+
+::..reaction::Reaction time is a factor in this so please pay attention. Answer as quickly as you can.
+::..dngr::Auribus teneo lupum.
+::..oncemore::Once more into the breach, dear friends, once more, or close up the wall with our English dead{!} In peace there's nothing so becomes a man as modest stillness and humility; but when the blast of ware blows in our ears, then imitate the action of the tiger: stiffen the sinews, summon up the blood.
+::..most::Most of my clients are nice enough to introduce me to friends at other businesses that I can help. Does anyone spring to mind?
+::altright::White Supremacists
+::alt-right::White Supremacists
+
+;;;;;;;;;;;;;;;;;;;;;;;;;Preferred Business Solutions;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+::..pbs::Preferred Business Solutions
+
+::..MSPsmall::
+InputBox, Name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send Managed / Outsourced IT for you %Name%?{tab}
+Send Hi %Name%,{return}{return}
+Send I don’t know if you've not looked at Managed or Outsourced IT solutions for your company, or just thought they ^iwere^i too expensive.  Either way, I’d be happy to show you how you can reduce the stress and headaches that staying on top of all of that IT can bring. {return 2}
+Send We're a local company helping other local companies and offices.{return 2}
+Send As the new Managed Services and Document Management contact for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send %Name%, ^ireply now^i, or call me today so that you can quickly see how we've helped other businesses just like yours.{return}
+Return
+
+::..itstruggle::
+InputBox, Name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send %name%, Don't fight with technology.  {tab}
+Send Hi %Name%,{return 2}
+Send Every year the world we live in becomes a little more specialized and a little more complicated. Small and medium sized businesses, just like yours, are forced to spend more money and resources just to keep up. {return 2}
+Send We, at Preferred Business Solutions, can work with you to take some (or all) of that burden off your back.  Let us manage those hassles so you can focus on building your business. {return 2}
+Send As the new Managed Services and Document Management contact for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send %Name%, ^ireply now^i, or call me today so that you can quickly see how we've helped other businesses just like yours.{return}
+Return
+
+::..itproject::
+InputBox, Name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send %name%, Changes and Projects {tab}
+Send Hi %Name%,{return 2}
+Send Do you have any IT changes, moves, or projects now, or in the future?  Do you think that a top notch local Managed Services company like Preferred Business Solutions could make that process simpler and easier? {return 2}
+Send We specialize in:{return}
+Send {tab}*Server and Desktop virtualization{return}
+Send {tab}*Help Desk Support{return}
+Send {tab}*Network Management{return}
+Send {tab}*Cloud Computing{return}
+Send {tab}*Disaster Recovery and Planning{return} 
+Send {tab}*and much more{return 2}
+Send As the new Managed Services and Document Management contact for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send %Name%, ^ireply now^i, or call me today so that you can quickly see how we've helped other businesses just like yours.{return}
+Return
+
+::..colde::
+InputBox, Name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send %name%: IT Help {tab}
+Send Hi %Name%,{return 2}
+Send Did you know that Preferred Business Solutions provides full Managed Service Solutions?  Technology marches forward and becomes more and more complex every year. It can be a struggle to keep up. Do you ever say to yourself "I bet there's an easier way to do this?!?" {return}
+Send We are the answer to that question and will make the technology side of your business simpler and easier. {return 2}
+Send We specialize in:{return}
+Send {tab}*One-Off IT Projects{return}
+Send {tab}*Server and Desktop virtualization{return}
+Send {tab}*Help Desk Support{return}
+Send {tab}*Network Management{return}
+Send {tab}*Cloud Computing{return}
+Send {tab}*Disaster Recovery and Planning{return} 
+Send {tab}*and much more{return 2}
+Send As the new Managed Services and Document Management Specialist for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send %Name%, ^isimply reply^i, or ^icall me today^i so that you can quickly see how we've helped other businesses just like yours.{return}
+Return
+
+::..ethanks::
+InputBox, Name, Prospects Name?
+Send %Name%: Managed IT - Preferred Business Solutions {tab}
+InputBox, xyzzy , Select Subject line
+Send Hi %name%,{return 2}
+Send Thank you for taking the time to chat with me today.  I know how busy you probably are.{return 2}
+Send As I mentioned on the phone, we offer a full line of Managed Services including:{return}
+Send {tab}*Server and Desktop virtualization{return}
+Send {tab}*Help Desk Support{return}
+Send {tab}*Network Management{return}
+Send {tab}*Cloud Computing{return}
+Send {tab}*Disaster Recovery and Planning{return} 
+Send {tab}*and much more{return 2}
+Send As the new Managed Services and Document Management specialist for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send If you have an upcoming IT project, say a hardware move or deployment, we would love the opportunity to show you how we merge the focus on tech and client happiness.{return}
+Return
+
+::..itintro::
+InputBox, name, Prospects Name?
+InputBox, company, Prospect Company?
+InputBox, xyzzy , Select Subject line
+Send Hi %name%, Can we talk about IT? {tab}
+Send Hi %name%,{return}{return}
+Send I don’t know if you've not looked at Managed or Outsourced IT solutions for %company%, or just thought it ^iwas^i too expensive.  Either way, I’d be happy to show you how you can reduce the stress and headaches that staying on top of all of those changes in IT have brought. {return 2}
+Send We're a local company helping other local companies and offices with IT Projects, Tier 1 Help Desk, Cloud services, and IT outsourcing. We're fiercely committed to customer service too{!}{return 2}
+Send As the new Managed Services and Document Management contact for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send %Name%, ^ireply now^i, or call me today so that you can quickly see how we've helped other businesses just like yours.{return}
+Return
+
+::..itGAG::
+InputBox, name, Prospects Name?
+InputBox, company, Prospect Company?
+InputBox, xyzzy , Select Subject line
+Send Preferred MSP {tab}
+Send Hi %name%,{return}{return}
+Send I'm sure that you're probably using some sort of outsourced IT services. It's almost impossible to be a small business these days without outsourcing something.  The reason that I'm reaching out to you is to provide you the opportunity to make sure that the solution you have in place is the best fit for you and %company%.{return 2}
+Send Preferred Business Solutions is a local company with over 20 years of focus on businesses just like yours.  We provide top tier IT services, from simple help desk support to mission critical virtual environments.  {return 2}
+Send While technology allows us to do much, much more than we could without it, it's ^icritical^i that we pay close attention to the ^bcomplexity and security vulnerabilites^b these capabilities provide.  Often this is way too difficult for small company or even a smaller Managed Services Provider to keep track of. {return 2}
+Send Even if your current solution is holding back the tide of threats, wouldn't it be good to have another top notch team on your side? {return 2}
+Send %Name%, ^ireply now^i, or call me today so that you can know how we've helped other businesses just like yours.{return}
+Return
+
+::..itgoodbye::
+InputBox, name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send Is this goodbye, %name%? {tab}
+Send Hi %name%, {return 2}
+Send I have tried to reach you a few times over the last few weeks to talk with you about the easiest and securest way to protect your company's second most important asset, your data. ^i(Call me to find out what the most important asset is)^i {return}
+Send We've not been able to connect, which leads me to believe:{return 2}
+Send {tab}*You do not want to work with a leading local Managed Services Provider to protect your company's IT infrastructure{return}
+Send {tab}*You are interested, but now isn't the right time. Next month would be better.{return}
+Send {tab}*You are good with trusting the IT cats and have stocked up on cat nip.  Please let me know, I'm beginning to worry... {return 2}
+Send [WeDidntTouchIT.jpg] {return 3}
+Send Best regards,{return}
+Return
+
+
+::..sig::
+Send Michael A. Dux{return}
+Send Managed IT Services / Document Management{return}
+Send Preferred Business Solutions {return}
+Send 425-390-7028  - Direct  |  253-777-8731  -  Mobile{return}
+Send http://preferredcopier.com/it-svcs.html{return}
+Send One team | One vision | One experience{return}
+Return
+
+::..pros::Pros for MSP/DM
+
+;::..itfu::
+FormatTime, Time, ,H:mm
+;Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}
+Send IT Email Follow up{tab}
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space} Sent IT Intro E-mail.{return}
+Return
+
+;::..itsent:: 
+Send, %A_YYYY%-%A_MM%-%A_DD%, %Time%{space}
+Send Sent IT Intro Email.
+Return
+
+::..stg1:: 
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Stage 1 (4d)
+Return
+
+::..stg2::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Stage 2 (3d)
+Return
+
+::..stg3::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} LVM Stage 3 (4d)
+Return
+
+::..stg4::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Sent "Cold E" Stage 4 (3d)
+Return
+
+::..stg5::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} LVM Stage 5 (4d)
+
+Return
+
+::..stg6::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Sent "IT Project" Stage 6 (4d)
+Return
+
+::..stg7::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Sent "IT Struggle" Stage 7 (4d)
+Return
+
+::..stg8::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} LVM Name and Number Sent "IT GAG" Stage 8 (4d)
+Return
+
+::..stg9::  
+FormatTime, Time,
+Send, %A_YYYY%-%A_MM%-%A_DD%{space} NVM Sent "IT Goodbye" (6m)
+Return
+
+::..itcurrent::	
+InputBox, name, Clients first name?
+InputBox, xyzzy , Select Subject line
+Send Preferred Managed Services / IT Question {tab}
+Send Hi %name%, {return 2}
+Send As a current Managed Services / IT client, I was hoping to have a short conversation with you regarding our services and how we're doing.   As the latest addition to the Managed Services team, on the sales side, my goal is to get a better understanding of what we're doing right and where we can improve in the future.  {return 2}
+Send ^bThis will not be a sales call.^b {return 2}
+Send Would you have a few minutes for me in the next week or so? {return 2}
+Send Best regards,{return 2}
+Return
+
+::..itlost::	
+InputBox, name, Clients first name?
+InputBox, xyzzy , Select Subject line
+Send Preferred Managed Services / IT Question {tab}
+Send Hi %name%, {return 2}
+Send I'm the newest member of the Managed Services/IT team (sales side) here at Preferred.  I'm reaching out to you to discuss, briefly, the decision not to proceed with us for your Managed Services needs. {return 2}
+Send I am hoping to have a short conversation with you regarding the situation to learn more about how it was decided then, that we were not a good fit. We're always striving to improve and this conversation would be solely for that purpose.  This will ^bnot^b be a sales call. {return 2}
+Send Would you have a few minutes for me in the next week or so? {return 2}
+Send Best regards,{return 2}
+Return
+
+::..linecard::
+Send We specialize in:{return}
+Send {tab}*One-Off IT Projects{return}
+Send {tab}*Server and Desktop virtualization{return}
+Send {tab}*Remote Desktop Management{return}
+Send {tab}*Network Management{return}
+Send {tab}*Cloud Computing{return}
+Send {tab}*Disaster Recovery and Planning{return} 
+Send {tab}*Copiers - Printers - Fax{return} 
+Send {tab}*Print cost control{return} 
+Send {tab}*Mailroom solutions{return} 
+Send {tab}*Document Management{return} 
+Send {tab}*Managed Displays (very cool{!}){return}
+Send {tab}*and much more{return 2}
+Return
+
+::..congrats::	
+InputBox, name, Clients first name?
+InputBox, special, What are we congradulating them on?,Congrats on...
+InputBox, xyzzy , Select Subject line
+Send Congrats on %special% {tab}
+Send Hi %name%, {return 2}
+Send I just noticed your team in the news. Congratulations.{return}
+Send Sounds like things are going well and I wanted to reach out to let you know that you're getting noticed. {return 2}
+Send Preferred is doing pretty well too.  We've made some changes and added some new lines. Maybe there's something we've done recently that could help your team continue your momentum? {return 2}
+Send I'd like to follow up with a quick call. When's a good time for you?{return 2}
+Send Best regards,
+Return
+
+::..currentc::
+InputBox, name, Client first name?
+InputBox, RepName, Reps name
+InputBox, RepInfo, Reps info
+InputBox, xyzzy , Select Subject line
+Send IT, DM, and Security. Oh My{!} {tab}
+Send Hi %name%,{return 2}
+Send This is Michael from Preferred.  I'm the IT and Document Management Specialist for you, and I have just three quick things for you and I'll let you get back to your day. {return 2}
+Send {space 4} 1 - Did you know that we offer a full portfolio of IT services?  Disaster Recovery, IT Optimization, and Network Security are the ^bbig three challenges^b most companies are facing, right now. Call us, so we can make sure you're business is secure.{return}
+Send {space 4} 2 - According to the experts, a single misfiled document will ^bcost you, on average, $122.00{!}^b  That is, if you're not using a Document Management(DM) system. Simple to use, powerful, and secure; Document Management is a must for nearly every business.  Do you want to find out how DM can give you a competitive advantage?{return}
+Send {space 4} 3 - We have an IT / Document Management Newsletter - Let us know if ^iyou would like to receive updates^i and IT articles about once a month.{return 2}
+Send ^bYour primary contact is still %RepName%^b.  You can reach out to either one of us for IT and Document Management solutions. {return}
+Send %RepInfo%{return 2}
+Send Best regards,
+Return
+
+::..workpbs:: {+}pbs @work
+
+::..winterdr::
+InputBox, name, Client's first name?
+InputBox, xyzzy, Select Subject Line
+Send It's Official - Winter is Coming. {tab}
+Send Hi %name%, {return 2}
+Send As the first storm rolls through the Pacific Northwest, this is a great reminder to us to check our Disaster Recovery / Business Continuity Plans. {return}
+;Send ^bSeattle Severe Weather Alert^b {tab}https://www.wunderground.com/US/WA/558.html#SPE {return 2}
+Send When is the last time the plan was revised?{return}
+Send When is the last time the plan was tested?{return}
+Send Do you know how many hours/days’ worth of data you have at risk?{return}
+Send Do you know how long it takes to recover data?{return}
+Send Do you know the cost per day of disruption?{return}
+Send Are you storing data on multiple media formats?{return}
+Send Are you taking backups of site, either physically or digitally?{return 2}
+Send ^bKey Terms to know:^b{return}
+Send {tab}^bRPO^b - Recovery Point Objective {return}
+Send {tab 2} How much data can be lost - worst case scenario.  {return 2}
+Send {tab 2} ^ii.e. If you perform a full back up on Thursday night, and an incremental on Tuesday night: If a disaster happens right before the backup on Tuesday, all data from Friday, Monday and Tuesday is at risk. Alternatively, if a disaster happens right before the full on Thursday, all data from Wednesday and Thursday is at risk. The RPO in this scenario is 3 or 2 days. ^i{return 2}
+Send {tab}^bRTO^b - Recovery Time Objective{return}
+Send {tab 2} How long does it take to actually recover the data? Remember that recovering from an incremental might include a recovery from the last full AND the incremental.{return 2}
+Send {tab}^bMTPoD^b - Maximum Tolerable Period of Disruption{return}
+Send {tab 2} Adding the longest RPO and RTO is your MTPoD.  Hopefully, this would be the longest period of time that business would be at a dead stop.{return 2}
+Send I say if you have it, you won't need it, but if you don't have it, you'll need it.{return 2}
+Send If you need help with your plan, or just want us to ‘make it happen’ for you, please call.{return 2}
+Send Best Regards,{return}
+Return
+
+
+::..cc1::
+InputBox, Name, Prospects Name?
+InputBox, xyzzy , Select Subject line
+Send %name%: Can we reduce IT costs?{tab}
+Send Hi %Name%,{return 2}
+Send Did you know that Preferred Business Solutions offers a full Managed Service Solutions line up?  {return}  
+Send As the new Managed Services and Document Management Specialist for your area, it is my job to introduce these solutions to businesses that are looking to be as efficient as possible.  {return 2}
+Send Since you're an existing client, we'd like to offer to do a Network Assessment for you, at ^bno cost^b.  {return 2}
+Send We specialize in:{return}
+Send {tab}*One-Off IT Projects{return}
+Send {tab}*Server and Desktop virtualization{return}
+Send {tab}*Desktop Management{return}
+Send {tab}*Network Management{return}
+Send {tab}*Cloud Computing{return}
+Send {tab}*Disaster Recovery and Planning{return} 
+Send {tab}*and much more{return 2}
+Send %Name%, ^isimply reply^i, or ^icall us today^i so that you can easily see how we've helped our other clients, just like you.{return}
+Send Best Regards, {return}
+Return
+
+::..cc2::
+InputBox, name, Prospects Name?
+InputBox, company, Prospect Company?
+InputBox, xyzzy , Select Subject line
+Send Can we talk about IT? {tab}
+Send Hi %name%,{return}{return}
+Send I don’t know if you've not looked at Managed or Outsourced IT solutions for %company%, or just thought it ^iwas^i too expensive.  Either way, I’d be happy to show you how you can reduce the stress and headaches that staying on top of all of the changes that technology has brought. {return 2}
+Send You know us as the preferred (pun intended) provider for Copiers and Mailing solutions, and we're also helping with IT Projects, Managed Services, Cloud services, and IT outsourcing. {return 2}
+Send As the new Managed Services and Document Management contact for your account, it is my job to introduce these solutions to our current clients that are looking to be as efficient as possible.  {return}
+Send I'm not replacing your current Copier or Mailing account manager, though I'm in charge of helping with any of your IT related needs. {return}
+Send %Name%, ^ireply now^i, or call me now so that we can see how we can reduce your IT costs or provide superior service.  (or both)  {return 2}
+Send Best regards, {return}
+Return
+
+::..mdec::
+InputBox, name, Prospects Name?
+Send Webinar: Don't Miss Chance to Learn about the Future of ECM {tab}
+Send Hi %name%,{return 2}
+Send I'm excited to tell you about an upcoming webinar our partner, M-Files, will be hosting.  The focus will be on the future of ECM and you don't want to miss it. {return}
+Send Recently receiving "Visionary" status in the ^b2016 Gartner Magic Quadrant^b for ECM, M-Files will provide an overview of its latest innovation-- Intelligent Metadata Layer (IML), stepping you through how content can be delivered in a dynamic, personalized context-aware manner.{return 2}
+Send If you're tired of the old approach to ECM or just want to learn about the future of ECM, I encourage you to attend.  Don't worry, if you can't make it the webinar will also be recorded for on-demand viewing.  {return 2}
+Send ^bREGISTER^b - Tuesday, December 6th at 11:00 AM (PST){return}
+Send http://dms.m-files.com/l/8782/2016-11-02/3gy1tf?Reseller_ID=547{return 2}
+Send Contact me if you have any questions,{return}
+Return
+
+::..ransom::
+InputBox, name, Prospect Name?
+InputBox, eyzzy, Select Subject Line
+Send Question about Ransomware{tab}
+Send Hi %name%, {return 2}
+Send The reason we're reaching out to you today is to learn more about how you're protecting your company from Ransomware like Locky and Cerber.  {return 2}
+Send Do you have a few moments to talk?{return}
+Return
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Canon;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+::.caira::ImageRUNNER ADVANCE
+
+::..agenda::
+Send ^b Objective:^b: {return}
+Send ^b Attendees:^b: {return}
+Send ^b Agenda Items:^b {return 2}
+Send  Please make changes to this meeting as needed. {return 2}
+Send ^bMaterials/information needed for the meeting^b: {return}
+Return
+
+;::.leasefee::Required Lease Processing Fee{tab}Canon Solutions America{tab}65.00
+
+;::..sig::
+Send Michael A. Dux{return}
+Send Technology Consultant, Senior{return}
+Send Canon Solutions America, Inc.{return}
+Send 12856 Interurban Ave South, Tukwila, WA, 98168{return}
+Send www.csa.canon.com{return}
+Send mdux@csa.canon.com{return}
+Send T 206.694.1841    C 253.777.8731    {return}
+Return
+
+;::.QBR::
+InputBox, Name, Who?
+Sleep, 500
+Send Hi %Name%, {return}
+Send ^bAgenda for Quarterly Business Review ^b{return 2}
+Send 1. Review previous Quarterly Business Review {return}
+Send 2. Review current state - How are we doing?{return}
+Send {space 4} a. Uptime{return}
+Send {space 4} b. Reliability{return}
+Send {space 4} c. Image Quality{return}
+Send {space 4} d. User Satisfaction{return}
+Send 3. Review "Year in print", print and service history{return}
+Send 4. What does the next 6-12 months look like?  Business changes?{return}
+Send 5. What initiatives are there that will impact print and document management?{return}
+Send 6. What are the current industry trends?{return}
+Send 7. Action items {return 2}
+Send Please add to this list as you see fit. {return}
+Send Best Regards, {return 2}
+Send Michael A. Dux {return}
+Send Canon Solutions America {return}
+Send 206.694.1841 {return}
+Return
+
+;::.odr::
+Send Craig Dyer{tab 3}
+InputBox, Serial, Serial Number
+InputBox, Account, Account Name
+Send Please Send me an On Demand Report for SerNo %Serial% for %Account% {tab}
+Send Thank you. {return}
+Return
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Holiday;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+::holspd::Happy St. Patrick's Day.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;Retired;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;::ahkprorate::
+InputBox, months, How many months?
+InputBox, term, From when to when? eg. June to 1/5/2014
+Send ** Co-termed Basic Maintenance with existing licensing {return}
+Send Pro-rated %months% months. (%term%) {return}
+Return
+
+;::AHKActiveDownload::
+InputBox, DL, What did they Download
+InputBox, FN, First Name
+InputBox, nothing, Highlight the Subject Field now.
+Send Regarding your recent download of %DL% {tab}
+Send Hi %FN%,{return}
+Send I’m following up to your recent download of %DL%.{return 2}
+Send We typically see two reasons for a new download: {return}
+Send {tab} 1) Upgrading to the latest version{return}
+Send 2) Something’s broken, and it’s hoped that a fresh install will fix it.{return 2}
+Send If there’s a problem, please reach out to me so I can get my tech team on the case to help out.{return 2}
+Send Otherwise,  thank you for being a great client.{return}
+Return
+;::powerschool::PowerSchool
+;::Powerschool::PowerSchool
+;::T4E::T4e
+;::Tools4Ever::Tools4ever
+
+;::ahktemp::
+InputBox, Product, Core Product?
+InputBox, CompanyName, Company Name?
+InputBox, Domain, Domain?
+InputBox, Users, # of Users Needed?
+InputBox, EndDate, License good until?
+InputBox, Interface, Which Interfaces? Mass/Forms/Automation/SSRPM/PSM
+InputBox, Function, Which Functions other than Base/Exchange/Advanced - PowerShell?
+InputBox, Reason, Why do they need the temps
+InputBox, null, Select the TO field now.
+Send Maintenance@advtoolware.com {tab 2}
+Send Temp key request for %CompanyName%{tab}
+Send Hello,{return 2}
+Send Please generate the following Temp key:{return 2}
+Send Company Name = %CompanyName% {return}
+Send Product = %Product% {return}{return}
+Send Domain = %Domain% {return}
+Send Number of Users = %Users% {return}
+Send License to Expire on = %EndDate% {return}
+Send Interface Modules = %Interface% {return}
+Send Function Modules = %Function% {return 2}
+Send Temp Key request reason: %Reason%{return}
+Return
+
+;::ahkexpired::
+InputBox, Contact, Contacts' first name?
+InputBox, Product, What are they expired on LONGNAME?
+InputBox, ProductShort, CODE for product  i.e. UMRA
+InputBox, Client, Name of the District or School?
+InputBox, Blah, HIGHLIGHT THE SUBJECT BOX NOW
+Send Tools4ever client update request for %Client% {tab}
+Send Hi %Contact%, {return}{return}
+Send {tab}I’m working on updating our client database records.  Can you help me by confirming that you are still the main point of contact for Tools4ever and %Product%(%ProductShort%)?   If you are no longer managing %ProductShort%, please send me the correct contact information so that I can follow up with them and keep our records clean. {return}{return}
+Send {tab}I also show that %Client% is no longer covered under a current maintenance agreement.  We see this happen from time to time when the primary contact moves on or is no longer managing the solution.  Currently, you do not have access to product updates, technical support, or consulting services.   I have several options available to re-instate your maintenance agreement easily. Can we have a short conversation so that %Cleint% has the support it needs? {return}{return}
+Send {tab}If you are no longer using %ProductShort%, I would like to have a short conversation with you to understand what has changed in your environment.  We take great pride in our solutions and our clients’ satisfaction and this conversation would certainly help us.{return}{return}
+Send Best Regards, {return}
+Return
+
+;::ahkum::
+Send User Management Resource Administrator 
+Return
+
+;::ahkss::
+Send Self Service Reset Password Management 
+Return
+
+;::ahkum1::
+Send User Management Resource Administrator (UMRA) 
+Return
+
+;::ahkss1::
+Send Self Service Reset Password Management (SSRPM) 
+Return
+
+;::ahkes::
+Send Enterprise Single Sign-On Manger 
+Return
+
+;::ahkes1::
+Send Enterprise Single Sign-On Manger (E-SSOM) 
+Return
+
+;::ahkdns::
+Send Can you please Send me a screen capture of the Domain? {return}
+Send {tab}Instructions: Open a command prompt from a PC or server within that domain. Enter the “set u” command. Look for “USERDNSDOMAIN=”. 
+Return
+
+
+;::ahknewkey::
+Send Entering in a key:{return}
+Send {tab}Open UMRA{return}
+Send {tab}Select “Help” from the top nav bar then “License”{shift}{return}
+Send {tab}Press Add and paste in the entire code including the “Begin_Code” and “End_Code”{shift}{return}
+Send {tab}Close the licensing window{return}
+Send {tab}Select “UMRA Service” from the top nav bar then ”Service Properties”{return}
+Send {tab}Select the “Service License” tab{return}
+Send {tab}Select “Copy to Service” this will copy your license to the service.
+Return
+
+
+;::runnewordernote::
+InputBox, QTY, Number of additional lics?
+InputBox, CODE, UMRA Module Codes?
+InputBox, TOTAL, New License Total?
+InputBox, BASIC, Additional Maint?
+InputBox, NEWLIC, New LIC Cost?
+InputBox, CONTACT, Send LIC to?
+InputBox, nothing, HIGHLIGHT THE Notes BOX NOW
+Send Client is purchasing %QTY% additional %CODE% licenses, bringing their new total to %TOTAL%. {return}
+Send Add $%BASIC%  to their next maintenance renewal. {return}
+Send New licenses to be sold at $%NEWLIC% per user. {return}
+Send Please send license key to: %Contact% {return}
+Return
+
+;::ahktempremind::
+InputBox, prod, Product? UMRA, SSRPM?
+InputBox, name, CONTACT FIRST NAME?
+InputBox, client, Client Name?
+InputBox, perm, Permanent Key QTY?
+InputBox, temp, Temp Key QTY?
+InputBox, exp, Temp Key Expiry?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send Temporary License Key Reminder - %prod%{tab}
+Send Hi %name%, {return}{return}
+Send We show that %client% has been issued a temporary license key for %temp% users that is set to expire on %exp%. {return}{return}
+Send After %exp%, UMRA may not function correctly if your User Object count exceeds your permanant key quantity of %perm%. I want to make sure that services are not interupted and that your automation and projects run as expected.{return}{return}
+Send Please let us know when you are back on your permanent license key so that we can retire the temp key in our system. {return}{return}
+Send Thank you. {return}
+Return
+
+;::ahkexec1::
+InputBox, name, CONTACT FIRST NAME?
+InputBox, school, NAME OF SCHOOL?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send IdM for Education -UMRA Executive Summary - for %school%{tab}
+
+Send Hi %name%, {return}{return}
+Send I've not been able to reach you by phone and wanted to introduce our Identity Management (IdM) solution to you. {return}{return}
+Send Executive Summary IdM/UMRA{return}
+Send The modern business environment is a mixture of various computer systems and resources, all of which are integral to meeting the needs of the organization.  In order to keep these systems—and the organization—running smoothly, it’s important to ensure that user information across all systems and resources remains consistent.  Many organizations use home-grown tools and custom scripts to accomplish this.  However, these tools and scripts may not be flexible enough to support the complete integration and automation of all systems and resources, leaving some systems to be managed manually.{return}{return}
+Send With User Management Resource Administrator (UMRA), the process of systems integration and automation is simplified by using the powerful drag-and-drop actions within the UMRA scripting environment.  This allows for highly customizable and powerful solutions to be rapidly deployed and updated, minimizing the time between planning and execution.  Actions that are bundled with UMRA include, but are not limited to: creating and editing Active Directory user accounts, adding and removing Active Directory group memberships, managing Exchange mailboxes, as well as creating and maintaining directory structures.  UMRA’s flexibility allows it to support any workflow.{return}{return}
+Send The advantages that UMRA integration and automation has over manual management are:{return}
+Send {tab}*Faster integration of user resources and account information, resulting in quicker ROI{return}
+Send {tab}*Scheduled tasks allow you to perform operations outside of business hours (i.e., data and mailbox migrations){return}
+Send {tab}*The possibility of human error is minimized by UMRA applying a standard process to all data{return}
+Send {tab}*Integration and automation with UMRA frees up IT staff to perform less repetitive duties{return}{return}
+Send I would like to discuss this solution with you to see if it is a good fit for %school%.  {return}
+Send {tab}When can we schedule a quick call?{return}{return}
+Send Best regards,{return}
+Return
+
+
+;::runumrainq::
+InputBox, name, Contacts first name?
+InputBox, school, School Name?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send UMRA curiosity follow up - %school%{tab}
+
+Send Hi %name%, {return}{return}
+Send This is Michael Dux from Tools4ever. You visited our website in the past looking for a faster and easier method for creating and manage student user accounts. Our User Management Resource Administrator software (UMRA) is used by universities and school districts across the country for SIS synchronization for importing, editing, and deleting of student and staff accounts in Active directory or eDirectory along with other downstream systems. {return}{return}
+Send UMRA can connect to many other systems to further streamline the user account management process across the network. Our Connectors include Google Apps, O365, ODBC, LDAP and over 130 more different systems.{return}{return}
+Send We are conducting online WebEx demonstrations of the User Management Resource Administrator specifically designed for Educational Institutions. Please contact me at your earliest convenience to schedule a demo or call if you have any questions.{return}{return}
+Send Best regards,{return}
+Return
+
+;::runtrueup::
+InputBox, contact, Contacts first name?
+InputBox, school, School Name?
+InputBox, date, Renewal Anniversary?
+InputBox, product, Solution?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send Licensing Check - %school%{tab}
+
+Send Hi %contact%, {return}{return}
+Send This is Michael Dux from Tools4ever.  {return}{return}
+Send Our records show that your maintenance renewal anniversary for %product% is %date% . Now is a great time to evaluate your licensing needs and see if you need additional licenses for the upcoming year.{return}{return}
+Send This is also a great time to start imagining upgrades you would like to see for your automation or form projects.{return}{return}
+Send Please reach out to me to let me know if there is anything I can do for you.  {return}{return}
+Send Best regards,{return}
+Return
+
+;::runomni::
+InputBox, name, Contacts first name?
+InputBox, school, School Name?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send Is %school% using a world class User Management Solution?{tab}
+
+Send Hi %name%, {return}{return}
+Send I work with districts and schools in your area focusing on Identity and Access Management(IdM) and how it simplifies and streamlines user management. Our solutions ensure that user information is consistent across all systems and resources at the same time greatly reducing the IT workload. Our solutions are used by happy clients with as few as 200 to well over 300,000 user accounts. In fact, we have 5 million user accounts being managed by Tools4ever software. With over 14 years of experience and an amazingly fast ROI, Tools4ever is the market leader.{return}{return}
+Send Are you still adding/modifying records manually, or relying on narrowly focused scripts? {return}
+
+Send Manual data entry can still work, but it's far from the best use of the IT staff's time. Narrowly focused "single pain point" scripts may solve an immediate problem, but quickly become a challenge to manage and keep updated. In the long run, these scripts move away from a unifying solution and add to the complexity of the environment.{return}{return}
+Send With User Management Resource Administrator (UMRA), the process of systems integration and automation is simplified by using the powerful drag-and-drop actions within the UMRA project environment.  This allows for highly customizable and powerful solutions to be rapidly deployed and updated, minimizing the time between planning and execution.  Actions that are bundled with UMRA include, but are not limited to: creating and editing Active Directory user accounts, adding and removing Active Directory group memberships, managing Exchange mailboxes, as well as creating and maintaining directory structures.  UMRA’s flexibility allows it to support any workflow, and there are over 130 connectors, including Infinite Campus and Skyward, to allow for a rapid solution deployment.{return}{return}
+Send I'd like to demonstrate how you will be able to easily see the power of a world class User Management solution.  When is a good time for us to talk or see a demonstration?{return}{return}
+Send Best regards,
+Return
+
+
+
+;::ahkdemo::
+INPUTBOX, CUST, Customer Name?
+InputBox, OBJ, Objective of the call?
+INPUTBOX, SYS, Systems client is using?
+INPUTBOX, SOURCE, What was the Lead Source?
+INPUTBOX, PAIN, What are the pain points/problem
+InputBox, QTY, Staff/Student Count?
+INPUTBOX, ATEN, Atendees?
+InputBox, nothing, HIGHLIGHT CALENDAR INVITE NOW
+Send Client: {tab}%CUST%{return}
+Send Attendees: {tab}%ATEN%{return}
+Send Objective: {tab}%OBJ%{return}
+Send Systems: {tab}%SYS%{return}
+Send Staff/Student: {tab}%QTY%{return}
+Send Lead Source: {tab}%SOURCE%{return}
+Send Pain Points: {tab}%PAIN%{return}
+Send Anything special about this demo? {return}
+Return
+
+;::ahkdemo2::
+InputBox, OBJ, Objective of the call?
+InputBox, SYS, Systems client is using?
+InputBox, QTY, Staff/Student Count?
+InputBox, nothing, HIGHLIGHT CALENDAR INVITE NOW
+Send Objective: {tab}%OBJ%{return}
+Send Systems: {tab}%SYS%{return}
+Send Staff/Student: {tab}%QTY%{return}
+Send Anything special about this demo? {return}
+Return
+
+
+;::ahkSOW::
+InputBox, STASTU, Staff? Student? Staff and Student? 
+InputBox, AUTO, Systems client is looking to Automate?
+InputBox, QTY, Staff/Student Count?
+InputBox, DEMO, Who did the Demo?
+InputBox, nothing, HIGHLIGHT CALENDAR INVITE NOW
+Send Focus: {tab}%STASTU%{return}
+Send Automate: {tab}%AUTO%{return}
+Send Staff/Student: {tab}%QTY%{return}
+Send Demo By: {tab}%DEMO%{return}
+Send Anything special about this SOW? {return}
+Return
+
+;::ahkcal::
+INPUTBOX, CUST, Customer Name?
+InputBox, OBJ, Demo/SOW/POC?
+InputBox, TIME, Date and Time?
+InputBox, CONS, Consultant?
+InputBox, QTY, User Count?
+INPUTBOX, SYS, Systems client is using?
+INPUTBOX, SOURCE, What was the Lead Source?
+INPUTBOX, PAIN, What are the pain points/problem
+INPUTBOX, ATEN, Atendees?
+InputBox, NOTES, Anything Special?
+InputBox, nothing, HIGHLIGHT THE SUBJECT LINE
+Send %OBJ% request for %CUST% {tab}{return}
+Send Demo/SOW/POC: {tab}%OBJ%{return}
+Send Date and Time: {tab}%TIME%{return}
+Send Consultant: {tab}%CONS%{return}
+Send Users: {tab 2}%QTY%{return}
+Send Systems: {tab}%SYS%{return}
+Send Lead Source: {tab}%SOURCE%{return}
+Send Pain Points: {tab}%PAIN%{return}
+Send Attendees: {tab}%ATEN%{return}
+Send Anything special about this demo? {return}%NOTES%
+Return
+
+
+;::ahketemplate::
+Send School: 
+Send Contact Name:{space}{space}{space}{space}Phone:{space}{space}{space}{space}Contact Mail:{space}{return}
+Send STU:{space}{return}
+Send STA:{space}{return}
+Send SIS:{space}{return}
+Send HR:{space}{return}
+Send Mail:{space}{return}
+Send LMS:{space}{return}
+Send Downstream:{space}{return}
+Send Current Method:{space}{return}
+Send ------------------------------------------------------------{return}
+
+Return
+
+;::ahkeform::
+InputBox, SCHOOL, School Name
+InputBox, STU, Student Count
+InputBox, STA, Staff Count
+InputBox, SIS, Student Information System
+InputBox, HR, HR System
+InputBox, MAIL, Email Program
+InputBox, LMS, Learning Managment System
+InputBox, DOWN, Other Downstream Systems
+InputBox, METH, Current Method
+InputBox, NAME, Concact Name
+InputBox, PHONE, Contact Phone
+InputBox, CMAIL, Contact Mail
+InputBox, NOTE, Notes?
+InputBox, None, HIGHLIGHT THE Evernote Note NOW
+Send %SCHOOL% {return}
+Send Contact:{space}%NAME%{space}{space}{space}{space}Phone:{space}%Phone%{space}{space}{space}{space}Contact Mail:{space}%CMAIL%{return}
+Send STU:{space}%STU%{return}
+Send STA:{space}%STA%{return}
+Send SIS:{space}%SIS%{return}
+Send HR:{space}%HR%{return}
+Send Mail:{space}%MAIL%{return}
+Send LMS:{space}%LMS%{return}
+Send Downstream:{space}%DOWN%{return}
+Send Current Method:{space}%METH%{return}
+Send Notes:{return}
+Send ------------------------------------------------------------{return}
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{Space}%note%{return}
+Return
+
+;::ahkfire::
+InputBox, NAME, First name of contact
+Send %NAME%, would you be so kind as to provide me some guidance; I do not want to be a bother and will gladly follow your direction. {return}{return} 
+Send Which of the below describes where we are at:{return}
+Send {space}{space}{space}{space}I’m ready to talk more now.{return}
+Send {space}{space}{space}{space}Please check back in 4 weeks.{return}
+Send {space}{space}{space}{space}We are no longer interested.
+Return
+
+
+;::ahklongtime::
+InputBox, NAME, Contacts Name?
+InputBox, nothing, HIGHLIGHT THE SUBJECT BOX NOW
+Send HR/SIS to Active Directory Sync {tab}
+Send Hi %NAME%, {return}{return}
+Send It's been a while since we last spoke, so I thought I would send you and email re-introducing our two primary solutions. {return}{return}
+Send INSERT_CS_LINK_HERE {return}{return}
+Send We routinely have an incredible positive impact on the workflow of Schools and Districts, and I'd love to show you what we could do for you. {return}{return}
+Send Please let me know when it would be a good time for us to talk.
+Return
+
+;::ahkpo::
+Send WOC for PO.
+Return
+
+
+;::ahkcss1::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{Space}Sent Blind Prospect SSRPM1 - Dux{return}
+Return
+
+;::ahkcss2::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{Space}Sent Blind Prospect SSRPM2 - Dux{return}
+Return
+
+;::ahkcsu1::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{Space}Sent Blind Prospect UMRA1 - Dux{return}
+Return
+
+;::ahkcsu2::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{Space}Sent Blind Prospect UMRA2 - Dux{return}
+Return
+
+
+
+::ahkEDUUMRA100e1::
+InputBox, EMAIL, Email Address
+InputBox, FNAME, First Name
+InputBox, STATE, State
+
+Send %EMAIL% {tab}{tab}{tab}
+Send Active Director and SIS Synchronization{tab}
+Send %FNAME%, hello.{return}{return}
+ 
+Send Per my recent letter, Tools4ever has helped school districts throughout the country with ^b user account^b and ^bpassword management^b processes.  We serve small to large school districts in %STATE% and throughout the country with software tools that you may have interest in exploring. {return}{return}
+
+Send Here is quote from one of our happy customers:{return}
+SEnd "Tools4ever’s UMRA software has ^isaved our district^i considerable man hours and resources by connecting to the Student Information System to automatically manage our user accounts in Active Directory. The Tools4ever consultants did an outstanding job implementing the UMRA and we ^ibegan saving immediately.^i" - Travis Brown, Network Administrator for Hutto Independent School District{return}{return}
+ 
+Send There are case studies and video testimonials from this customer and many others on our url: http://www.tools4ever.com/industries/education/references/{return}{return}
+ 
+Send I would like to learn about your current efforts on user provisioning with AD and your SIS to see where we may be of value.  ^iCall me^i as soon as you can so we can discuss. {return}
+Return
+
+::ahk1em1::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU100em1 - Dux{return}
+Return
+::ahk1em2::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU100em2 - Dux{return}
+Return
+::ahk1em3::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU100em3 - Dux{return}
+Return
+::ahk1vm1::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU100vm1 - Dux{return}
+Return
+::ahk1vm2::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU100vm2 - Dux{return}
+Return
+
+
+::ahknotee21::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU 200 em1 (UMRA)- Dux{return}
+Return
+::ahknotev21::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU 200 vm1 (UMRA) - Dux{return}
+Return
+::ahknotee22::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU 200 em2 (SSRPM) - Dux{return}
+Return
+::ahknotev22::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU 200 vm2 (SSRPM) - Dux{return}
+Return
+
+::ahknotee23::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU 200 em3 (UMRA)- Dux{return}
+Return
+::ahknotev23::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU 200 vm3 (UMRA) - Dux{return}
+Return
+::ahknotee24::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Sent EDU 200 em4 (SSRPM) - Dux{return}
+Return
+::ahknotev24::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}Left EDU 200 vm4 (SSRPM) - Dux{return}
+Return
+
+::ahkmail21::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send SIS sync to Active Directory {tab}
+Send Hi %Name%,{return}{return}
+Send I don’t know if you've not looked at Identity Management (IdM) solutions for your district, or just thought they were too expensive.  Either way, I’d be happy to show you how you can reduce both the cost and time associated with managing a user account through their full life-cycle. {return}{return}
+Send As the territory manager for %State% it is my job to introduce this solution to districts that are looking to be as efficient as possible.  {return}{return}
+Send %Name%, ^ireply now^i, or call me today so that you can quickly see how great of a tool this really is.{return}
+Return
+
+
+
+
+::ahkmail22::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send %name% Stop resetting user passwords; keep everyone happy{tab}
+Send Hi %Name%,{return}{return}
+Send Every year school districts ^bpay their help desk staff^b to reset student and staff passwords. While this is the norm, it’s far from the most efficient solution.  I’d be happy to show you how you can dramatically ^breduce the number of calls to the help desk^b and help end users reset their own network passwords. This solution increases your help desk staff’s productivity, and allows the end user to get back to doing what they should, while saving your district money.   {return}{return}
+Send As the territory manager for %state%, it is my job to introduce this solution to districts that are looking to be as efficient as possible. {return}{return}
+Send %Name%, ^irespond now^i, or call me today so that you can quickly see how great of a tool this really is.{return}{return}
+Return
+
+::ahkmail23::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send Automated User Management - SIS to AD{tab}
+Send Hi %name%,{return}{return}
+Send I help districts and colleges in %State% see the benefit of ^iautomating user creation and synchronization^i with a flexible software tool called User Management Resource Administrator (UMRA).{return}{return}
+Send Do you care about ^bincreasing efficiency and accuracy^b of user data in your applications?  {return}
+Send Would you be willing to see how we’ve helped hundreds of districts, just like yours, streamline the user lifecycle process?  I want to help.  As the Education Manager for %State%, I am excited to show you how this will work and how we can work together.{return}{return}
+Send %Name%, ^icall me^i to find out more or schedule a private demo.{return}{return}
+Send Best regards,{return}
+Return
+
+::ahkmail24::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send %Name% Reduce the number of help-desk tickets with Self Service {tab}
+Send Hi %Name%,{return}{return}
+Send I help districts and colleges in %State% reduce the number of calls to the help desk, and help users get back into their computer with a simple and elegant solution called Self Service Reset Password Management.{return}{return}
+Send I’m looking for the opportunity to talk to you and show you how we can help your district ^ireduce password reset calls by up to 90`%^i, and in turn, make your district more efficient.{return}{return}
+Send %Name%, simply reply with two dates that work for you, and I’ll schedule a private demo.{return}{return}
+Send Best regards,{return}
+Return
+
+
+;; Windows Key + s -> Kills and restarts Shoretell
+#s:: 
+Process, Close, ShoreTel.exe
+Run "C:\Program Files (x86)\Shoreline Communications\ShoreWare Client\ShoreTel.exe"
+Return
+
+
+
+::ahkorderchecklist::
+Send {shift Down}{ctrl Down}C{Shift Up}{Ctrl Up}Got PO?{enter}
+Sleep, 100
+Send Got DNS Screenshot?{enter}
+Sleep, 100
+Send Build New Order Form{enter}
+Sleep, 100
+Send Close CRM Opty {enter}
+Sleep, 100
+Send Track order in GDocs {enter}
+Sleep, 100
+Send }Submit CPP {enter}
+Sleep, 100
+Send Walk Order Form {enter}
+Sleep, 100
+Send Send Thank You and PreIntake Doc is coming
+Return
+
+
+;::ahktood::
+InputBox, task, What is the Task?
+InputBox, con, Context? phone-online-waiting
+Send %task%{space}
+Send `*Tools4ever{space}
+Send @%con%{space}
+Send $Next Action
+Return
+
+
+::ahkemail1::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send SIS sync to Active Directory {tab}
+Send Hi %Name%,{return 2}
+Send I don’t know if you've not looked at Identity Management (IdM) solutions for your district, or just thought they were too expensive.  Either way, I’d be happy to show you how you can reduce both the cost and time associated with managing a user account through their full life-cycle. {return 2}
+Send As the territory manager for %State% it is my job to introduce this solution to districts that are looking to be as efficient as possible.  {return 2}
+Send %Name%, reply now, or call me today so that you can quickly see how great of a tool this really is.{return 2}
+Send Best regards, {return}
+Return
+
+::ahkemail4::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send %name%, Stop resetting user passwords; keep everyone happy{tab}
+Send Hi %Name%,{return 2}
+Send Every year school districts ^bpay their help desk staff^b to reset student and staff passwords. While this is the norm, it’s far from the most efficient solution.  I’d be happy to show you how you can dramatically ^breduce the number of calls to the help desk^b and help end users reset their own network passwords. This solution increases your help desk staff’s productivity, and allows the end user to get back to doing what they should, while saving your district money.   {return 2}
+Send As the territory manager for %state%, it is my job to introduce this solution to districts that are looking to be as efficient as possible. {return 2}
+Send %Name%, respond now, or call me today so that you can quickly see how great of a tool this really is.{return 2}
+Return
+
+;::ahkemail5::
+InputBox, Name, Prospects Name?
+InputBox, State, Prospects State?
+Send Identity Management for Education {tab}
+Send Hi %Name%, {return 2}
+Send This is Michael at Tools4ever. {return 2}
+Send You might be curious why Sherry, the Information Security Office at Fitchburg State College said “There’s no other company that I deal with regularly that I like better.” The answer is simple, we help districts and colleges easily manage user identities and user passwords more efficiently and more effectively.  Our solutions are perfect for the education world, with our low TCO approach and customer service focus. {return 2}
+Send So, my question for you %Name% is, ”What do I need to do, to show you what we can do, for you?" {return 2}
+Send %Name%, please reply.{return 2}
+Send Best regards,
+Return
+
+;::ahktd::
+;Toodledoemail Subject Formating
+InputBox, Action, Tell me what to do...
+InputBox, nothing, Select TO field now
+Send todo.52561@toodledo.com {tab 2}
+Send %Action% {space} 
+Send @work *Tools4ever $Next Action
+Send {tab 3}
+Send -end- {return}
+Return
+
+::..td::
+InputBox, PRI, Priority A B C Z
+InputBox, Action, Tell me what to do...
+InputBox, Context, Context work home phone
+InputBox, Pro, Which project
+FormatTime, Time, , H:mm
+Send (%PRI%){space}
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}  
+Send %Action%{space}{+}%Pro%{space}@%Context%{return}
+Return
+
+::..tdt::
+InputBox, PRI, Pirority A B C Z
+InputBox, Action, Tell me what to do...
+;InputBox, Context, Where T4e Home
+FormatTime, Time, , H:mm
+Send (%PRI%){space}
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}
+Send %Action% {+}T4e{space}@work{return}
+Return
+
+::..newtodo::
+InputBox, PRI, Pirority A B C Z
+InputBox, Action, Tell me what to do...
+InputBox, Context, work? home? phone?, No preceeding @
+InputBox, Project, Project?, No preceeding +
+FormatTime, Time, , H:mm
+Send (%PRI%){space}
+Send, %A_YYYY%-%A_MM%-%A_DD%{space}
+Send %Action% {space}{@}%Context%{space}{+}%Project%{return}
+Return
+
+
+::cb1::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 1 - NVM
+Return
+
+::cb1c::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 1 - NVM -Dux
+Return
+
+::cb2::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 2 - NVM
+Return
+
+::cb2c::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 2 - NVM -Dux
+Return
+
+::cb3::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space} Left Message CB-3
+Return
+
+::cb3c::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space} Left Message CB-3 -Dux
+Return
+
+::cb4::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 4 - NVM
+Return
+
+::cb4c::
+FormatTime, TimeString,, ShortDate
+Send %TimeString%{space}CB 4 - NVM -Dux
+Return
+
+::cb5::
+FormatTime, TimeString,, ShortDate
+Send On Deck
+Return
+
+
+::ahkdownload::
+InputBox, name, Who downloaded?
+InputBox, product, What did they download?
+InputBox, nothing, highlight the SUBJECT field.
+Send Everything OK with %product%? {tab}
+Send Hi %name%,{return 2}
+Send We show that you recently downloaded %product% and I wanted to follow up to make sure everything was OK, and that you were just updating to the newest release.{return 2}
+Send Please let me know either way.{return 2}
+Send Best regards, {return}
+Return
